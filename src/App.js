@@ -1,24 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { lazy, Suspense } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-function App() {
+import { Layout, Row, Spin } from 'antd';
+const { Content } = Layout;
+
+const InitPage = lazy(() => import('./Page/InitPage'));
+const TeamSettingPage = lazy(() => import('./Page/TeamSettingPage'));
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <Router>
+          <Suspense fallback={<Row justify='center' align='middle' style={{minHeight: '100vh'}}><Spin size="large"/></Row>}>
+              <Layout style={{ minHeight: '100vh' }}>
+                  <Content style={{padding: '5px'}}>
+                      <Routes>
+                          <Route exact path='/' element={<InitPage/>}/>
+                          <Route exact path='/team' element={<TeamSettingPage/>}/>
+                      </Routes>
+                  </Content>
+              </Layout>
+          </Suspense>
+      </Router>
   );
 }
 
