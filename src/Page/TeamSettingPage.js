@@ -61,9 +61,9 @@ const TeamSettingPage = () => {
     };
 
     const onClickAddPlayer = (type) => {
-        type === 'white' ? setWhitePlayerList([whitePlayer, ...whitePlayerList]) :
-            type === 'black' ? setBlackPlayerList([blackPlayer, ...blackPlayerList]) :
-                setGreenPlayerList([greenPlayer, ...greenPlayerList]);
+        type === 'white' ? setWhitePlayerList([...whitePlayerList, whitePlayer]) :
+            type === 'black' ? setBlackPlayerList([...blackPlayerList, blackPlayer]) :
+                setGreenPlayerList([...greenPlayerList, greenPlayer]);
     };
 
     const onClickPlayerSave = () => {
@@ -74,11 +74,11 @@ const TeamSettingPage = () => {
         // eslint-disable-next-line array-callback-return
         window.localStorage.setItem('teamList', JSON.stringify([...teamList.map(v => {
             if(v.key === 'white')
-                return {...v, players: whitePlayerList};
+                return {...v, players: whitePlayerList, score: 0};
             else if(v.key === 'black')
-                return {...v, players: blackPlayerList};
+                return {...v, players: blackPlayerList, score: 0};
             else
-                return {...v, players: greenPlayerList};
+                return {...v, players: greenPlayerList, score: 0};
         })]));
         navigate('/game');
     };
@@ -102,7 +102,7 @@ const TeamSettingPage = () => {
 
             </Col>
             {current === 0 ?
-                <Row gutter={[8, 8]} justify='center'>
+                <Row gutter={[8, 8]} justify='center' style={{textAlign: 'center'}}>
                     <Col span={24}>
                         <div style={{textAlign: 'center'}}>
                             <Transfers initialTeamList={initialTeamList} setTeamList={setTeamList} teamList={teamList}/>
@@ -114,7 +114,6 @@ const TeamSettingPage = () => {
                         </div>
                     </Col>
                 </Row>
-
                 :
                 current === 1 ?
                     <Row gutter={[8, 8]} justify='center'>
@@ -130,10 +129,11 @@ const TeamSettingPage = () => {
                     </Row>
                     :
                     current === 2 ?
-                        <Row gutter={[8, 8]}>
+                        <Row gutter={[8, 8]} style={{textAlign: 'center'}}>
                             {teamList.map(v => (
                                 <Col offset={1} span={7} key={v.team}>
-                                    <SetPlayers header={v.team} whitePlayerList={whitePlayerList} blackPlayerList={blackPlayerList} greenPlayerList={greenPlayerList} />
+                                    <SetPlayers header={v.team} whitePlayerList={whitePlayerList} blackPlayerList={blackPlayerList} greenPlayerList={greenPlayerList}
+                                                setWhitePlayerList={setWhitePlayerList} setBlackPlayerList={setBlackPlayerList} setGreenPlayerList={setGreenPlayerList}/>
                                 </Col>
                             ))}
                             {teamList.map(v => (

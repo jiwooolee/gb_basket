@@ -16,7 +16,7 @@ const Transfers = ({ initialTeamList, setTeamList, teamList }) => {
     };
 
     return (
-        <Transfer dataSource={initialTeamList}
+        <Transfer style={{justifyContent: 'center'}} dataSource={initialTeamList}
                   titles={['대기', '등록']}
                   targetKeys={targetKeys}
                   selectedKeys={selectedKeys}
