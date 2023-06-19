@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 
 import { List } from "antd";
 
-const Lists = ({ header, whitePlayerList, blackPlayerList, greenPlayerList }) => {
+const SetPlayers = ({ header, whitePlayerList, blackPlayerList, greenPlayerList }) => {
     const [data, setData] = useState([]);
 
     useEffect(() => {
@@ -23,4 +23,4 @@ const Lists = ({ header, whitePlayerList, blackPlayerList, greenPlayerList }) =>
     );
 };
 
-export default Lists;
+export default SetPlayers;
