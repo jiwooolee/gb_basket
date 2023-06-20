@@ -1,13 +1,13 @@
 import React from 'react';
 import { useNavigate } from "react-router-dom";
 
-import { Row, Col } from "antd";
+import { Row, Col, Typography } from "antd";
 import { TeamOutlined } from '@ant-design/icons';
 
-import BackGround from "../Component/Image/BackGround";
 import BasicButton from "../Component/Button/BasicButton";
 
 const InitPage = () => {
+    const { Title } = Typography;
     const navigate = useNavigate();
 
     const onClickTeamSetting = () => {
@@ -15,15 +15,16 @@ const InitPage = () => {
     };
 
     return (
-        <Row gutter={[32, 32]} justify='center'>
+        <Row style={{textAlign: 'center', minHeight: '100vh', backgroundImage:`url(${process.env.PUBLIC_URL}/Image/Background.jpg)`,
+            backgroundRepeat:"no-repeat", backgroundPosition: 'center', backgroundSize: 'cover'}} gutter={[32, 0]} justify='center' align='bottom'>
             <Col span={24}>
-                <BackGround width='100%' preview={false} src={'logo.png'}/>
-            </Col>
-            <Col>
-                <BasicButton type='default' shape='default' size='large'
+                <BasicButton style={{size: '2rem'}} type='primary' shape='default' size='large'
                              icon={<TeamOutlined/>} text='팀 설정' disabled={false}
                              onClick={onClickTeamSetting}
                 />
+            </Col>
+            <Col span={24}>
+                <Title italic style={{fontSize: '6rem'}}>Green Buffalos Stats</Title>
             </Col>
         </Row>
     )

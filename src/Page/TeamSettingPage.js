@@ -84,9 +84,13 @@ const TeamSettingPage = () => {
     };
 
     return (
-        <Row gutter={[16, 16]} justify='center'>
+        <Row style={{paddingTop: '2rem'}} gutter={[16, 16]} justify='center'>
             <Col span={24}>
-                <Step current={current} setCurrent={setCurrent} items={items}/>
+                <Row style={{justifyContent: 'center'}}>
+                    <Col span={8}>
+                        <Step current={current} setCurrent={setCurrent} items={items}/>
+                    </Col>
+                </Row>
             </Col>
             <Col span={12}>
                 <div style={{textAlign: 'right'}}>
@@ -102,7 +106,7 @@ const TeamSettingPage = () => {
 
             </Col>
             {current === 0 ?
-                <Row gutter={[8, 8]} justify='center' style={{textAlign: 'center'}}>
+                <Row gutter={[8, 8]} justify='center' style={{textAlign: 'center', padding: '1rem'}}>
                     <Col span={24}>
                         <div style={{textAlign: 'center'}}>
                             <Transfers initialTeamList={initialTeamList} setTeamList={setTeamList} teamList={teamList}/>
