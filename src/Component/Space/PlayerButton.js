@@ -3,8 +3,9 @@ import React from 'react';
 import { Space, Typography } from "antd";
 
 import BasicButton from "../Button/BasicButton";
+import quarter from "../Carousel/Quarter";
 
-const PlayerButton = ({ type, attackPlayersList, defencePlayersList, setOpen, setRecentAction, text, playAttackTeam, playDefenceTeam, setPlayAttackTeam, setPlayDefenceTeam, totalGame, setTotalGame }) => {
+const PlayerButton = ({ type, attackPlayersList, defencePlayersList, setOpen, setRecentAction, text, playAttackTeam, playDefenceTeam, setPlayAttackTeam, setPlayDefenceTeam, teamList, setTeamList }) => {
     const { Text } = Typography;
 
     const calPercent = (a, b) => {
@@ -53,12 +54,19 @@ const PlayerButton = ({ type, attackPlayersList, defencePlayersList, setOpen, se
                     return v;
                 }
         })]};
-        type === 'attack' ? setPlayAttackTeam({...playAttackTeam, players: temp.players, score: temp.score}) : setPlayDefenceTeam(temp);
+        type === 'attack' ? setPlayAttackTeam({...playAttackTeam, players: temp.players, score: temp.score}) : setPlayDefenceTeam({...playAttackTeam, players: temp.players, score: temp.score});
+        setTeamList(teamList.map(v => {
+            if(v.key === temp.key) {
+                return {...v, players: temp.players, score: temp.score};
+            } else {
+                return v;
+            }
+        }))
     };
 
     return (
         <Space>
-            {(type === 'attack' ? attackPlayersList : defencePlayersList).map((v, i) =>
+            {(type === 'attack' ? quarter < 3 ? attackPlayersList : defencePlayersList : quarter < 3 ? defencePlayersList : attackPlayersList).map((v, i) =>
                 <BasicButton key={i} shape='circle' size='small' text={<Text>{v.name}</Text>} onClick={() => onClickPlayer(v, type, text)}/>
             )}
         </Space>
