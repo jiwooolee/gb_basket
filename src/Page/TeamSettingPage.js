@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 
-import { Row, Col, Space } from "antd";
+import { Row, Col, Space, message } from "antd";
 import { OrderedListOutlined, TeamOutlined, UserOutlined, RightOutlined, LeftOutlined, PlusOutlined } from '@ant-design/icons';
 
 import Step from "../Component/Steps/Step";
@@ -43,6 +43,10 @@ const TeamSettingPage = () => {
     ];
 
     const onClickSteps = (type) => {
+        if(teamList.length < 2) {
+            message.error({content: '2팀 이상 설정 해주세요.'}).then();
+            return;
+        }
         type === 'next' ? setCurrent(current + 1) : setCurrent(current - 1);
     };
 

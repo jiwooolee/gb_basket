@@ -21,3 +21,12 @@ code {
   background-color: #fafafa;
   font-weight: bold;
 }
+
+.TableFontSize {
+  font-size: 10px;
+  padding: 6px 5px !important;
+}
+
+.ant-table-tbody > tr > td {
+
+}

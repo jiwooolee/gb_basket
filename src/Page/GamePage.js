@@ -13,10 +13,6 @@ const GamePage = () => {
     }, []);
 
     useEffect(() => {
-        console.log(teamList)
-    }, [teamList]);
-
-    useEffect(() => {
         if(teamList.length > 0) {
             let temp = [];
             if(teamList.length === 3) {

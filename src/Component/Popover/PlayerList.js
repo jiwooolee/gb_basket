@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 
-import { message, Popover, Typography } from "antd";
+import { message, Popover } from "antd";
 
 import BasicButton from "../Button/BasicButton";
 import PlayerButton from "../Space/PlayerButton";
 
 const PlayerList = ({ text, type, setRecentAction, playAttackTeam, playDefenceTeam, quarter, setPlayAttackTeam, setPlayDefenceTeam, teamList, setTeamList, currentAttackPlayerList, currentDefencePlayerList }) => {
-    const { Text } = Typography;
     const [open, setOpen] = useState(false);
+    const badActionList = ['2점 실패',  '3점 실패',   '턴오버', '파울'];
 
     const onOpenChange = (isOpen) => {
         if(isOpen === true) {
@@ -30,7 +30,7 @@ const PlayerList = ({ text, type, setRecentAction, playAttackTeam, playDefenceTe
                           currentAttackPlayerList={currentAttackPlayerList} currentDefencePlayerList={currentDefencePlayerList}
             />
         }>
-            <BasicButton shape='circle' size='small' text={<Text>{text}</Text>} onClick={() => setOpen(open !== true)}/>
+            <BasicButton style={{width: '6rem'}} text={text} onClick={() => setOpen(open !== true)} danger={badActionList.includes(text)}/>
         </Popover>
     )
 };
