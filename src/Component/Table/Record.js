@@ -1,11 +1,11 @@
 import React from 'react';
 
-import { Table } from "antd";
+import { message, Table } from "antd";
 
-
-const Record = ({ team }) => {
+const Record = ({ team, currentPlayerList, setCurrentPlayerList }) => {
     const columns = [
         {title: 'Name', dataIndex: 'name', align: 'center', width: 100, fixed: 'left'},
+        {title: 'PQ', dataIndex: 'PQ', align: 'center'},
         {title: 'FG%', dataIndex: 'FG%', align: 'center', render: (text) => `${text}%`},
         {title: '2PA', dataIndex: '2PA', align: 'center'},
         {title: '2PM', dataIndex: '2PM', align: 'center'},
@@ -22,10 +22,36 @@ const Record = ({ team }) => {
         {title: 'BLK', dataIndex: 'BLK', align: 'center'},
         {title: 'TOV', dataIndex: 'TOV', align: 'center'},
         {title: 'PF', dataIndex: 'PF', align: 'center'},
+        {title: 'BEFF', dataIndex: 'BEFF', align: 'center'},
     ];
 
+    const onClickRow = (row) => {
+        return {
+            onClick: () => {
+                if(currentPlayerList.length === 5) {
+                    if(currentPlayerList.findIndex(v => v.key === row.key) !== -1) {
+                        setCurrentPlayerList(currentPlayerList.filter(v => v.key !== row.key));
+                    } else {
+                        message.error({content: '5명을 넘을 수 없습니다.'}).then();
+                    }
+                } else {
+                    if(currentPlayerList.findIndex(v => v.key === row.key) === -1) {
+                        setCurrentPlayerList([...currentPlayerList, row]);
+                    } else {
+                        setCurrentPlayerList(currentPlayerList.filter(v => v.key !== row.key));
+                    }
+                }
+            }
+        }
+    };
+
+    const rowClassName = (row) => {
+        return currentPlayerList.find(v => v.key === row.key) === undefined ? null : 'HighLight'
+    };
+
     return (
-        <Table rowKey='key' dataSource={[...team.players]} size='small' columns={columns} scroll={{x: 950}} pagination={false}/>
+        <Table className='Table_Hover' rowKey='key' dataSource={[...team.players]} size='small'
+               columns={columns} scroll={{x: 950}} pagination={false} onRow={onClickRow} rowClassName={rowClassName}/>
     )
 };
 

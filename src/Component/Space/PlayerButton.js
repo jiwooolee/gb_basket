@@ -3,9 +3,8 @@ import React from 'react';
 import { Space, Typography } from "antd";
 
 import BasicButton from "../Button/BasicButton";
-import quarter from "../Carousel/Quarter";
 
-const PlayerButton = ({ type, attackPlayersList, defencePlayersList, setOpen, setRecentAction, text, playAttackTeam, playDefenceTeam, setPlayAttackTeam, setPlayDefenceTeam, teamList, setTeamList }) => {
+const PlayerButton = ({ type, setOpen, setRecentAction, text, playAttackTeam, playDefenceTeam, setPlayAttackTeam, setPlayDefenceTeam, teamList, setTeamList, currentAttackPlayerList, currentDefencePlayerList }) => {
     const { Text } = Typography;
 
     const calPercent = (a, b) => {
@@ -66,7 +65,7 @@ const PlayerButton = ({ type, attackPlayersList, defencePlayersList, setOpen, se
 
     return (
         <Space>
-            {(type === 'attack' ? quarter < 3 ? attackPlayersList : defencePlayersList : quarter < 3 ? defencePlayersList : attackPlayersList).map((v, i) =>
+            {(type === 'attack' ? currentAttackPlayerList : currentDefencePlayerList).map((v, i) =>
                 <BasicButton key={i} shape='circle' size='small' text={<Text>{v.name}</Text>} onClick={() => onClickPlayer(v, type, text)}/>
             )}
         </Space>

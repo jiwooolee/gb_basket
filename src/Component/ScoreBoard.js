@@ -11,22 +11,20 @@ const ScoreBoard = ({ teamList, setTeamList, attackTeam, defenceTeam }) => {
     const { Text, Title } = Typography;
     const [playAttackTeam, setPlayAttackTeam] = useState({});
     const [playDefenceTeam, setPlayDefenceTeam] = useState({});
-    const [attackPlayersList, setAttackPlayersList] = useState([]);
-    const [defencePlayersList, setDefencePlayersList] = useState([]);
+    const [currentAttackPlayerList, setCurrentAttackPlayerList] = useState([]);
+    const [currentDefencePlayerList, setCurrentDefencePlayerList] = useState([]);
     const [recentAction, setRecentAction] = useState('');
     const [quarter, setQuarter] = useState(1);
     const actionList = ['2점 성공', '2점 실패', '3점 성공', '3점 실패', '공격 리바', '수비 리바', '어시스트', '스틸', '블락', '턴오버', '파울'];
 
     useEffect(() => {
         if(Object.keys(attackTeam).length > 0 && teamList.length > 0) {
-            setAttackPlayersList(attackTeam.players);
             setPlayAttackTeam(teamList.find(v => v.key === attackTeam.key));
         }
     }, [attackTeam, teamList]);
 
     useEffect(() => {
         if(Object.keys(defenceTeam).length > 0 && teamList.length > 0) {
-            setDefencePlayersList(defenceTeam.players);
             setPlayDefenceTeam(teamList.find(v => v.key === defenceTeam.key));
         }
     }, [defenceTeam, teamList]);
@@ -36,10 +34,11 @@ const ScoreBoard = ({ teamList, setTeamList, attackTeam, defenceTeam }) => {
             <Row gutter={[16, 16]}>
                 {actionList.map((v, i) =>
                         <Col key={i} span={6}>
-                            <PlayerList type={type} attackPlayersList={attackPlayersList} defencePlayersList={defencePlayersList} text={v}
+                            <PlayerList type={type} text={v}
                                         playAttackTeam={playAttackTeam} playDefenceTeam={playDefenceTeam} quarter={quarter}
                                         setPlayAttackTeam={setPlayAttackTeam} setPlayDefenceTeam={setPlayDefenceTeam}
-                                        setRecentAction={setRecentAction} teamList={teamList} setTeamList={setTeamList}/>
+                                        setRecentAction={setRecentAction} teamList={teamList} setTeamList={setTeamList}
+                                        currentAttackPlayerList={currentAttackPlayerList} currentDefencePlayerList={currentDefencePlayerList}/>
                         </Col>
                 )}
             </Row>
@@ -48,6 +47,8 @@ const ScoreBoard = ({ teamList, setTeamList, attackTeam, defenceTeam }) => {
 
     const onClickChange = () => {
         if(quarter < 4) {
+            setCurrentAttackPlayerList([]);
+            setCurrentDefencePlayerList([]);
             setQuarter(quarter + 1);
         }
     };
@@ -55,7 +56,7 @@ const ScoreBoard = ({ teamList, setTeamList, attackTeam, defenceTeam }) => {
     return (
         <Row gutter={[16, 4]}>
             <Col span={6}>
-                {actionButton('attack')}
+                {quarter < 3 ? actionButton('attack') : actionButton('defense')}
             </Col>
             <Col span={12}>
                 <Row style={{textAlign: 'center'}} gutter={[16, 0]}>
@@ -99,17 +100,23 @@ const ScoreBoard = ({ teamList, setTeamList, attackTeam, defenceTeam }) => {
                 </Row>
             </Col>
             <Col span={6}>
-                {actionButton('defence')}
+                {quarter < 3 ? actionButton('defense') : actionButton('attack')}
             </Col>
             {Object.keys(playAttackTeam).length > 0 ?
                 <Col span={12}>
-                    <Record team={quarter < 3 ? playAttackTeam : playDefenceTeam}/>
+                    <Record team={quarter < 3 ? playAttackTeam : playDefenceTeam}
+                            currentPlayerList={quarter < 3 ? currentAttackPlayerList : currentDefencePlayerList}
+                            setCurrentPlayerList={quarter < 3 ? setCurrentAttackPlayerList : setCurrentDefencePlayerList}
+                    />
                 </Col>
                 : null
             }
             {Object.keys(playDefenceTeam).length > 0 ?
                 <Col span={12}>
-                    <Record team={quarter < 3 ? playDefenceTeam : playAttackTeam}/>
+                    <Record team={quarter < 3 ? playDefenceTeam : playAttackTeam}
+                            currentPlayerList={quarter < 3 ? currentDefencePlayerList : currentAttackPlayerList}
+                            setCurrentPlayerList={quarter < 3 ? setCurrentDefencePlayerList : setCurrentAttackPlayerList}
+                    />
                 </Col>
                 : null
             }

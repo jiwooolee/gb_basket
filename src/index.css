@@ -11,3 +11,13 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.HighLight {
+  background-color: #fafafa;
+  font-weight: bold;
+}
+
+.HighLight .ant-table-cell-fix-left {
+  background-color: #fafafa;
+  font-weight: bold;
+}
