@@ -65,9 +65,28 @@ const TeamSettingPage = () => {
     };
 
     const onClickAddPlayer = (type) => {
-        type === 'white' ? setWhitePlayerList([...whitePlayerList, whitePlayer]) :
-            type === 'black' ? setBlackPlayerList([...blackPlayerList, blackPlayer]) :
+        if(type === 'white') {
+            if(whitePlayerList.find(v => v.key === whitePlayer.key) === undefined) {
+                message.success({content: whitePlayer.key + ' 등록'}).then();
+                setWhitePlayerList([...whitePlayerList, whitePlayer]);
+            } else {
+                message.error({content: whitePlayer.key + ' 이름 중복'}).then();
+            }
+        } else if(type === 'black') {
+            if(blackPlayerList.find(v => v.key === blackPlayer.key) === undefined) {
+                message.success({content: blackPlayer.key + ' 등록'}).then();
+                setBlackPlayerList([...blackPlayerList, blackPlayer]);
+            } else {
+                message.error({content: blackPlayer.key + ' 이름 중복'}).then();
+            }
+        } else {
+            if(greenPlayerList.find(v => v.key === greenPlayer.key) === undefined) {
+                message.success({content: greenPlayer.key + ' 등록'}).then();
                 setGreenPlayerList([...greenPlayerList, greenPlayer]);
+            } else {
+                message.error({content: greenPlayer.key + ' 이름 중복'}).then();
+            }
+        }
     };
 
     const onClickPlayerSave = () => {
@@ -139,13 +158,13 @@ const TeamSettingPage = () => {
                     current === 2 ?
                         <Row gutter={[8, 8]} style={{textAlign: 'center'}}>
                             {teamList.map(v => (
-                                <Col offset={1} span={7} key={v.team}>
+                                <Col offset={1} span={teamList.length === 3 ? 7 : 11} key={v.team}>
                                     <SetPlayers header={v.team} whitePlayerList={whitePlayerList} blackPlayerList={blackPlayerList} greenPlayerList={greenPlayerList}
                                                 setWhitePlayerList={setWhitePlayerList} setBlackPlayerList={setBlackPlayerList} setGreenPlayerList={setGreenPlayerList}/>
                                 </Col>
                             ))}
                             {teamList.map(v => (
-                                <Col span={8} key={v.team}>
+                                <Col span={teamList.length === 3 ? 8 : 12} key={v.team}>
                                     <Space.Compact>
                                         <Name type={v.key} setWhitePlayer={setWhitePlayer} setBlackPlayer={setBlackPlayer} setGreenPlayer={setGreenPlayer} />
                                         <BasicButton icon={<PlusOutlined/>} size='small' onClick={() => onClickAddPlayer(v.key)}/>
