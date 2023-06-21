@@ -71,7 +71,7 @@ const ScoreBoard = ({ teamList, setTeamList, attackTeam, defenceTeam }) => {
                         <Space direction='vertical'>
                             <Text strong>{quarter} 쿼터</Text>
                             <BasicButton type='primary' text='다음 쿼터' size='small' onClick={onClickChange} disabled={quarter === 4}/>
-                            <BackGround width='100%' preview={false} src='arrow.png'/>
+                            <BackGround width='100%' preview={false} src='AttackArrow.png'/>
                         </Space>
                     </Col>
                     <Col span={10}>
