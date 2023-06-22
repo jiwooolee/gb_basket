@@ -4,7 +4,9 @@ import { Space } from "antd";
 
 import BasicButton from "../Button/BasicButton";
 
-const PlayerButton = ({ type, setOpen, setRecentAction, text, playAttackTeam, playDefenceTeam, setPlayAttackTeam, setPlayDefenceTeam, teamList, setTeamList, currentAttackPlayerList, currentDefencePlayerList }) => {
+const PlayerButton = ({ type, setOpen, setRecentAction, text, playAttackTeam, playDefenceTeam, setPlayAttackTeam, setPlayDefenceTeam, teamList, setTeamList,
+                          currentAttackPlayerList, currentDefencePlayerList, attackTeamActionList, defenceTeamActionList, setAttackTeamActionList, setDefenceTeamActionList,
+                          attackTeamActionIndex, defenceTeamActionIndex, setAttackTeamActionIndex, setDefenceTeamActionIndex }) => {
     const calPercent = (a, b) => {
         return (a / b) * 100;
     };
@@ -14,10 +16,17 @@ const PlayerButton = ({ type, setOpen, setRecentAction, text, playAttackTeam, pl
     };
 
     const onClickPlayer = (player, type, action) => {
-        setRecentAction(player.name + ' ' + action);
         setOpen(false);
-
         let temp = type === 'attack' ? playAttackTeam : playDefenceTeam;
+        setRecentAction({key: temp.key, team: temp.team, name: player.name, action: action});
+        type === 'attack' ?
+            setAttackTeamActionList([...attackTeamActionList, {key: attackTeamActionIndex, team: temp.team, name: player.name, action: action}])
+            :
+            setDefenceTeamActionList([...defenceTeamActionList, {key: defenceTeamActionIndex, team: temp.team, name: player.name, action: action}]);
+        type === 'attack' ?
+            setAttackTeamActionIndex(attackTeamActionIndex + 1)
+            :
+            setDefenceTeamActionIndex(defenceTeamActionIndex + 1);
         // eslint-disable-next-line array-callback-return
         temp = {...temp,
             score: action === '2점 성공' ? (temp.score + 2) : action === '3점 성공' ? (temp.score + 3) : action === '앤드원' ? (temp.score + 1) : temp.score,
@@ -68,7 +77,7 @@ const PlayerButton = ({ type, setOpen, setRecentAction, text, playAttackTeam, pl
                     return v;
                 }
         })]};
-        type === 'attack' ? setPlayAttackTeam({...playAttackTeam, players: temp.players, score: temp.score}) : setPlayDefenceTeam({...playAttackTeam, players: temp.players, score: temp.score});
+        type === 'attack' ? setPlayAttackTeam({...playAttackTeam, players: temp.players, score: temp.score}) : setPlayDefenceTeam({...playDefenceTeam, players: temp.players, score: temp.score});
         setTeamList(teamList.map(v => {
             if(v.key === temp.key) {
                 return {...v, players: temp.players, score: temp.score};

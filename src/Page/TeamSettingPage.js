@@ -66,31 +66,67 @@ const TeamSettingPage = () => {
 
     const onClickAddPlayer = (type) => {
         if(type === 'white') {
-            if(whitePlayerList.find(v => v.key === whitePlayer.key) === undefined) {
-                message.success({content: whitePlayer.key + ' 등록'}).then();
-                setWhitePlayerList([...whitePlayerList, whitePlayer]);
+            if(Object.keys(whitePlayer).length === 0 || whitePlayer.key === '') {
+                message.error({content: '공백을 채워주세요.'}).then();
             } else {
-                message.error({content: whitePlayer.key + ' 이름 중복'}).then();
+                if(whitePlayerList.find(v => v.key === whitePlayer.key) === undefined) {
+                    message.success({content: whitePlayer.key + ' 등록'}).then();
+                    setWhitePlayerList([...whitePlayerList, whitePlayer]);
+                } else {
+                    message.error({content: whitePlayer.key + ' 이름 중복'}).then();
+                }
             }
         } else if(type === 'black') {
-            if(blackPlayerList.find(v => v.key === blackPlayer.key) === undefined) {
-                message.success({content: blackPlayer.key + ' 등록'}).then();
-                setBlackPlayerList([...blackPlayerList, blackPlayer]);
+            if(Object.keys(blackPlayer).length === 0 || blackPlayer.key === '') {
+                message.error({content: '공백을 채워주세요.'}).then();
             } else {
-                message.error({content: blackPlayer.key + ' 이름 중복'}).then();
+                if(blackPlayerList.find(v => v.key === blackPlayer.key) === undefined) {
+                    message.success({content: blackPlayer.key + ' 등록'}).then();
+                    setBlackPlayerList([...blackPlayerList, blackPlayer]);
+                } else {
+                    message.error({content: blackPlayer.key + ' 이름 중복'}).then();
+                }
             }
         } else {
-            if(greenPlayerList.find(v => v.key === greenPlayer.key) === undefined) {
-                message.success({content: greenPlayer.key + ' 등록'}).then();
-                setGreenPlayerList([...greenPlayerList, greenPlayer]);
+            if(Object.keys(greenPlayer).length === 0 || greenPlayer.key === '') {
+                message.error({content: '공백을 채워주세요.'}).then();
             } else {
-                message.error({content: greenPlayer.key + ' 이름 중복'}).then();
+                if(greenPlayerList.find(v => v.key === greenPlayer.key) === undefined) {
+                    message.success({content: greenPlayer.key + ' 등록'}).then();
+                    setGreenPlayerList([...greenPlayerList, greenPlayer]);
+                } else {
+                    message.error({content: greenPlayer.key + ' 이름 중복'}).then();
+                }
             }
         }
     };
 
     const onClickPlayerSave = () => {
-        setPlayerStatus('finish');
+        const temp = [];
+        if(teamList.length > 0) {
+            teamList.map(v => {
+                if(v.key === 'white') {
+                    if(whitePlayerList.length === 0) {
+                        temp.push(true);
+                    }
+                } else if(v.key === 'black') {
+                    if(blackPlayerList.length === 0) {
+                        temp.push(true);
+                    }
+                } else {
+                    if(greenPlayerList.length === 0) {
+                        temp.push(true);
+                    }
+                }
+                return v;
+            });
+        }
+        if(temp.length > 0) {
+            message.error({content: '각 팀당 최소 1명 이상 채워주세요.'}).then();
+        } else {
+            message.success({content: '선수 저장 완료.'}).then();
+            setPlayerStatus('finish');
+        }
     };
 
     const onClickNextButton = () => {
@@ -125,9 +161,7 @@ const TeamSettingPage = () => {
                     <BasicButton size='small' icon={<RightOutlined/>} disabled={current === 2} onClick={() => onClickSteps('next')}/>
                 </div>
             </Col>
-            <Col span={24}>
-
-            </Col>
+            <Col span={24}/>
             {current === 0 ?
                 <Row gutter={[8, 8]} justify='center' style={{textAlign: 'center', padding: '1rem'}}>
                     <Col span={24}>
@@ -158,14 +192,14 @@ const TeamSettingPage = () => {
                     current === 2 ?
                         <Row gutter={[8, 8]} style={{textAlign: 'center'}}>
                             {teamList.map(v => (
-                                <Col offset={1} span={teamList.length === 3 ? 7 : 11} key={v.team}>
+                                <Col span={teamList.length === 3 ? 8 : 12} key={v.team}>
                                     <SetPlayers header={v.team} whitePlayerList={whitePlayerList} blackPlayerList={blackPlayerList} greenPlayerList={greenPlayerList}
                                                 setWhitePlayerList={setWhitePlayerList} setBlackPlayerList={setBlackPlayerList} setGreenPlayerList={setGreenPlayerList}/>
                                 </Col>
                             ))}
                             {teamList.map(v => (
                                 <Col span={teamList.length === 3 ? 8 : 12} key={v.team}>
-                                    <Space.Compact>
+                                    <Space.Compact style={{width: '100%'}}>
                                         <Name type={v.key} setWhitePlayer={setWhitePlayer} setBlackPlayer={setBlackPlayer} setGreenPlayer={setGreenPlayer} />
                                         <BasicButton icon={<PlusOutlined/>} size='small' onClick={() => onClickAddPlayer(v.key)}/>
                                     </Space.Compact>
