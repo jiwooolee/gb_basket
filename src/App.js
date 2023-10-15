@@ -7,6 +7,7 @@ const { Content } = Layout;
 const InitPage = lazy(() => import('./Page/InitPage'));
 const TeamSettingPage = lazy(() => import('./Page/TeamSettingPage'));
 const GamePage = lazy(() => import('./Page/GamePage'));
+const RecordPage = lazy(() => import('./Page/RecordPage'));
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
                           <Route exact path='/' element={<InitPage/>}/>
                           <Route exact path='/team' element={<TeamSettingPage/>}/>
                           <Route exact path='/game' element={<GamePage/>}/>
+                          <Route exact path='/record' element={<RecordPage/>}/>
                       </Routes>
                   </Content>
               </Layout>
