@@ -39,7 +39,7 @@ const RecordPage = () => {
                 <PlayerList playerList={playerList}/>
             </Sider>
             <Content>
-                b
+                bl
             </Content>
         </Layout>
     );
