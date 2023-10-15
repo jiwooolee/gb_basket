@@ -22,7 +22,7 @@ const SetPlayers = ({ header, whitePlayerList, blackPlayerList, greenPlayerList,
     };
 
     return (
-        <List header={header} dataSource={data} size='small'
+        <List header={header} dataSource={data} bordered={true} size='small'
               renderItem={(item) => (
                   <List.Item style={{justifyContent: 'center'}} key={item.key}>
                       <Space>{item.name} <BasicButton size='small' shape='circle' danger={true} icon={<MinusOutlined/>} onClick={() => onClickDeletePlayer(item)}/></Space>

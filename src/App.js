@@ -13,8 +13,8 @@ const App = () => {
   return (
       <Router>
           <Suspense fallback={<Row justify='center' align='middle' style={{minHeight: '100vh'}}><Spin size="large"/></Row>}>
-              <Layout style={{ minHeight: '100vh'}}>
-                  <Content style={{paddingLeft: '5px', paddingRight: '5px'}}>
+              <Layout style={{ minHeight: '100vh' }}>
+                  <Content style={{paddingLeft: '10px', paddingRight: '10px'}}>
                       <Routes>
                           <Route exact path='/' element={<InitPage/>}/>
                           <Route exact path='/team' element={<TeamSettingPage/>}/>
