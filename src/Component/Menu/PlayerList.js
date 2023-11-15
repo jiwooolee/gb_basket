@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from 'react';
-import {Menu} from "antd";
-import {UserOutlined} from "@ant-design/icons";
+import React, { useEffect, useState } from 'react';
+import { Menu } from "antd";
+import { UserOutlined } from "@ant-design/icons";
 
-const PlayerList = ({ playerList }) => {
+const PlayerList = ({ playerList, setSelectedPlayer }) => {
     const [menuItems, setMenuItems] = useState([]);
 
     useEffect(() => {
@@ -11,9 +11,12 @@ const PlayerList = ({ playerList }) => {
     }, [playerList]);
 
 
+    const onClickPlayer = (player) => {
+        setSelectedPlayer(player.key);
+    };
 
     return (
-        <Menu mode='inline' items={menuItems}/>
+        <Menu mode='inline' items={menuItems} onClick={onClickPlayer}/>
     );
 
 };
