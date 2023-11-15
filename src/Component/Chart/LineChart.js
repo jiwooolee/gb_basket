@@ -1,30 +1,12 @@
 import React, {useEffect, useState} from 'react';
 
 import { Line } from '@ant-design/plots';
-import {Card, Col, Row, Select} from "antd";
+import {Button, Card, Col, Row, Select} from "antd";
+import {MinusOutlined, PlusOutlined} from "@ant-design/icons";
 
-const LineChart = ({ finalRecord }) => {
+const LineChart = ({ finalRecord, defaultOption }) => {
     const [data, setData] = useState([]);
-    const optionList = [
-        {value: 'fg', label: '야투율'},
-        {value: 'twoTry', label: '2점 시도'},
-        {value: 'twoMade', label: '2점 성공'},
-        {value: 'twoPer', label: '2점 성공률'},
-        {value: 'threeTry', label: '3점 시도'},
-        {value: 'threeMade', label: '3점 성공'},
-        {value: 'threePer', label: '3점 성공률'},
-        {value: 'points', label: '득점'},
-        {value: 'totalRebound', label: '총 리바운드'},
-        {value: 'offensiveRebound', label: '공격 리바운드'},
-        {value: 'defensiveRebound', label: '수비 리바운드'},
-        {value: 'assist', label: '어시스트'},
-        {value: 'steal', label: '스틸'},
-        {value: 'block', label: '블락'},
-        {value: 'turnOver', label: '턴오버'},
-        {value: 'foul', label: '파울'},
-        {value: 'beff', label: '종합 지표'}
-    ];
-    const [selectedOption, setSelectedOption] = useState('points');
+    const [expansion, setExpansion] = useState(false);
 
     useEffect(() => {
         if(finalRecord.length > 0) {
@@ -33,26 +15,24 @@ const LineChart = ({ finalRecord }) => {
     }, [finalRecord]);
 
     const config = {
-        data, padding: 'auto', xField: 'date', yField: selectedOption,
+        data, padding: 'auto', xField: 'date', yField: defaultOption.value,
     };
 
-   const onChangeOption = (value) => {
-       setSelectedOption(value);
-   };
+    const onClickExpansion = () => {
+        setExpansion((prevState) => !prevState);
+    };
 
     return (
-
-        <Card title='Record' size='small'>
-            <Row gutter={[16, 16]}>
-                <Col span={4}>
-                    <Select style={{width: '100%'}} options={optionList} defaultValue='points' onChange={onChangeOption} />
-                </Col>
-                <Col span={16}/>
-                <Col span={24}>
-                    <Line {...config}/>
-                </Col>
-            </Row>
-        </Card>
+        <Col key={defaultOption.value} span={expansion === false ? 6 : 24}>
+            <Card type='inner' title={defaultOption.label} size='small'
+                  extra={<Button icon={expansion === false ? <PlusOutlined/> : <MinusOutlined/>} onClick={onClickExpansion}/>}>
+                <Row gutter={[16, 16]}>
+                    <Col span={24}>
+                        <Line {...config}/>
+                    </Col>
+                </Row>
+            </Card>
+        </Col>
     );
 };
 

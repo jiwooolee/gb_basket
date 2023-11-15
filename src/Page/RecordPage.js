@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { read, utils } from 'xlsx';
-import { Layout } from "antd";
+import {Card, Col, Layout, Row} from "antd";
 import PlayerList from "../Component/Menu/PlayerList";
 import LineChart from "../Component/Chart/LineChart";
 const { Content, Sider } = Layout;
@@ -11,6 +11,25 @@ const RecordPage = () => {
     const [selectedPlayer, setSelectedPlayer] = useState(null);
     const [selectedRecord, setSelectedRecord] = useState([]);
     const [finalRecord, setFinalRecord] = useState([]);
+    const optionList = [
+        {value: 'fg', label: '야투율'},
+        {value: 'twoTry', label: '2점 시도'},
+        {value: 'twoMade', label: '2점 성공'},
+        {value: 'twoPer', label: '2점 성공률'},
+        {value: 'threeTry', label: '3점 시도'},
+        {value: 'threeMade', label: '3점 성공'},
+        {value: 'threePer', label: '3점 성공률'},
+        {value: 'points', label: '득점'},
+        {value: 'totalRebound', label: '총 리바운드'},
+        {value: 'offensiveRebound', label: '공격 리바운드'},
+        {value: 'defensiveRebound', label: '수비 리바운드'},
+        {value: 'assist', label: '어시스트'},
+        {value: 'steal', label: '스틸'},
+        {value: 'block', label: '블락'},
+        {value: 'turnOver', label: '턴오버'},
+        {value: 'foul', label: '파울'},
+        {value: 'beff', label: '종합 지표'}
+    ];
 
     useEffect(() => {(
         async() => {
@@ -130,11 +149,17 @@ const RecordPage = () => {
 
     return (
         <Layout>
-            <Sider>
+            <Sider style={{background: 'white'}}>
                 <PlayerList playerList={playerList} setSelectedPlayer={setSelectedPlayer}/>
             </Sider>
             <Content>
-                <LineChart finalRecord={finalRecord}/>
+                <Card title='Record'>
+                    <Row gutter={[16, 16]}>
+                        {optionList.map(v =>
+                            <LineChart key={v.value} finalRecord={finalRecord} defaultOption={v}/>
+                        )}
+                    </Row>
+                </Card>
             </Content>
         </Layout>
     );
