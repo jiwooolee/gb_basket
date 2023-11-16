@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { read, utils } from 'xlsx';
-import {Card, Col, Layout, Row} from "antd";
+import {Card, Col, Layout, Row, Select, Space, Typography} from "antd";
 import PlayerList from "../Component/Menu/PlayerList";
 import LineChart from "../Component/Chart/LineChart";
+import {UserOutlined} from "@ant-design/icons";
 const { Content, Sider } = Layout;
 
 const RecordPage = () => {
@@ -11,6 +12,8 @@ const RecordPage = () => {
     const [selectedPlayer, setSelectedPlayer] = useState(null);
     const [selectedRecord, setSelectedRecord] = useState([]);
     const [finalRecord, setFinalRecord] = useState([]);
+    const [type, setType] = useState('pq');
+    const [loading, setLoading] = useState(false);
     const optionList = [
         {value: 'fg', label: '야투율'},
         {value: 'twoTry', label: '2점 시도'},
@@ -43,49 +46,26 @@ const RecordPage = () => {
 
     useEffect(() => {
         if(excelFile.length > 0) {
-            console.log(excelFile)
             const uniqueObjArr = excelFile.filter((obj, idx) => {
                 const isFirstFindIdx = excelFile.findIndex((obj2) => obj2.name === obj.name);
                 return isFirstFindIdx === idx;
             });
-            console.log(excelFile)
             setPlayerList(uniqueObjArr.map(v => v.name).sort((a, b) => a.localeCompare(b)));
         }
     } ,[excelFile]);
 
     useEffect(() => {
-        console.log(playerList)
-    }, [playerList]);
-
-    useEffect(() => {
         if(selectedPlayer !== null && excelFile.length > 0) {
-            // const playerRecord = excelFile.filter(v => v.name === selectedPlayer);
             setSelectedRecord(excelFile.filter(v => v.name === selectedPlayer));
-            // playerRecord.reduce((acc, cur) => {
-            //     if(acc.length > 0 && acc.find(v => v.date === cur.date) !== undefined) {
-            //         const temp = acc;
-            //         temp.map((v) => {
-            //             if(v.date === cur.date) {
-            //                 Object.keys(v).map(b => {
-            //                     if(b !== 'name' && b !== 'date')
-            //                         v[b] = v[b] + cur[b];
-            //                 });
-            //             }
-            //             return v;
-            //         });
-            //         return temp;
-            //     } else {
-            //         return acc;
-            //     }
-            // }, []);
+            setFinalRecord([]);
         }
-    }, [selectedPlayer, excelFile]);
+    }, [selectedPlayer, excelFile, type]);
 
     useEffect(() => {
         if(selectedRecord.length > 0) {
+            setLoading(true);
             const temp = selectedRecord;
             let arr = [];
-            console.log(temp)
             for(let i = 0; i < selectedRecord.length; i++) {
                 if(i === 0)
                     arr.push(temp[i]);
@@ -118,34 +98,57 @@ const RecordPage = () => {
                 }
             }
             setFinalRecord(arr.map(v => {
+                const divider = type === 'pq' ? v[type] : type;
                 return {...v,
-                    assist: (v.assist / v.pq),
-                    beff: (v.beff / v.pq),
-                    block: (v.block / v.pq),
-                    defensiveRebound: (v.defensiveRebound / v.pq),
-                    fg: (v.fg / v.pq),
-                    foul: (v.foul / v.pq),
-                    offensiveRebound: (v.offensiveRebound / v.pq),
-                    points: (v.points / v.pq),
-                    steal: (v.steal / v.pq),
-                    threeMade: (v.threeMade / v.pq),
-                    threePer: (v.threePer / v.pq),
-                    threeTry: (v.threeTry / v.pq),
-                    totalRebound: (v.totalRebound / v.pq),
-                    turnOver: (v.turnOver / v.pq),
-                    twoMade: (v.twoMade / v.pq),
-                    twoPer: (v.twoPer / v.pq),
-                    twoTry: (v.twoTry / v.pq),
+                    assist: (v.assist / divider),
+                    beff: (v.beff / divider),
+                    block: (v.block / divider),
+                    defensiveRebound: (v.defensiveRebound / divider),
+                    fg: (v.fg / divider),
+                    foul: (v.foul / divider),
+                    offensiveRebound: (v.offensiveRebound / divider),
+                    points: (v.points / divider),
+                    steal: (v.steal / divider),
+                    threeMade: (v.threeMade / divider),
+                    threePer: (v.threePer / divider),
+                    threeTry: (v.threeTry / divider),
+                    totalRebound: (v.totalRebound / divider),
+                    turnOver: (v.turnOver / divider),
+                    twoMade: (v.twoMade / divider),
+                    twoPer: (v.twoPer / divider),
+                    twoTry: (v.twoTry / divider),
                 }
             }));
+            setTimeout(() => {
+                setLoading(false);
+                }, 1000);
+
         }
     }, [selectedRecord]);
 
-    useEffect(() => {
-        if(finalRecord.length > 0) {
-            console.log(finalRecord)
-        }
-    }, [finalRecord]);
+    const title = () => (
+        <Row justify='space-between'>
+            <Col span={4}>
+                <Space size='large'>
+                    <Typography.Text strong>Record</Typography.Text>
+                    {finalRecord.length > 0 ?
+                        <Typography.Text strong><UserOutlined/>{finalRecord[0].name}</Typography.Text> : <></>
+                    }
+                </Space>
+            </Col>
+
+            <Col span={4}>
+                <Select style={{width: '100%'}} onChange={onChangeType} defaultValue='pq'
+                        options={[{value: 'pq', label: '쿼터'}, {value: 2.7, label: '경기'}]}/>
+            </Col>
+        </Row>
+    );
+
+    const onChangeType = (value) => {
+        setType(value);
+        setSelectedRecord([]);
+        setFinalRecord([]);
+    };
 
     return (
         <Layout>
@@ -153,10 +156,10 @@ const RecordPage = () => {
                 <PlayerList playerList={playerList} setSelectedPlayer={setSelectedPlayer}/>
             </Sider>
             <Content>
-                <Card title='Record'>
+                <Card title={title()}>
                     <Row gutter={[16, 16]}>
                         {optionList.map(v =>
-                            <LineChart key={v.value} finalRecord={finalRecord} defaultOption={v}/>
+                            <LineChart key={v.value} finalRecord={finalRecord} defaultOption={v} loading={loading}/>
                         )}
                     </Row>
                 </Card>
